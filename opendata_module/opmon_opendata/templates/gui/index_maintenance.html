@@ -1,0 +1,88 @@
+<!--
+  ~ The MIT License
+  ~ Copyright (c) 2021- Nordic Institute for Interoperability Solutions (NIIS)
+  ~ Copyright (c) 2017-2020 Estonian Information System Authority (RIA)
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in
+  ~ all copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  ~ THE SOFTWARE.
+  -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>X-Road Metrics, OpenData</title>
+
+    <script type="text/javascript" src="/javascript/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/javascript/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/javascript/jquery-datatables/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="/javascript/moment/moment.min.js"></script>
+    <script type="text/javascript"
+            src="/javascript/eonasdan-bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'gui/index.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="/javascript/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/javascript/jquery-datatables/css/jquery.dataTables.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="/javascript/eonasdan-bootstrap-datetimepicker/bootstrap-datetimepicker.min.css"/>
+    <link rel="shortcut icon" type="image/png" href="/static/favicon-32x32.png"/>
+
+</head>
+<body>
+<div class="container-fluid">
+
+    <div class="header">
+        <table width="100%" align="center" border="0" cellpadding="0" cellspacing="0" style="margin:0 auto">
+            <tbody>
+            <tr bgcolor="#ffffff">
+                <td width="66%" align="left">
+                    <a href="https://x-road.global/">
+                        <img src="/static/gui/xroad-metrics-100.png" alt="X-ROAD" style="display:block; height:auto;"
+                             height="auto" align="left" valign="top">
+                    </a>
+                </td>
+                <td width="33%" align="right"><img src="/static/gui/eu_rdf_100_en.png"
+                                                   alt="European Union / European Regional Development Fund / Investing in your future"
+                                                   style="display:block; height:auto;" height="auto" align="right"
+                                                   valign="top">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="page-header">
+        <h1>Sorry, currently under maintenance</h1>
+        <h3>X-Road Metrics, OpenData</h3>
+    </div>
+
+    <div class="clearfix"></div>
+    <div id="datatable"></div>
+
+    <hr/>
+</div>
+
+
+<script>$("#date").datetimepicker({
+    format: "YYYY-MM-DD",
+    minDate: moment("April 25, 2017", "MMM DD, YYYY"), maxDate: moment("Dec. 24, 2017", "MMM DD, YYYY")
+});
+</script>
+<script src="/static/gui/index.js"></script>
+</body>
+</html>

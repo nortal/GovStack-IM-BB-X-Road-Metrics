@@ -1,0 +1,52 @@
+xroad:
+  instance: <FILL>
+
+opendata:
+  # Records are available as Opendata after this delay period
+  delay-days: 10
+
+  # Number of records to show in the UI preview
+  preview-limit: 10
+
+  # Field data file contains a schema of the Opendata records. This should be identical to the field data schema
+  # used by the Anonymizer module.
+  field-data-path: /etc/xroad-metrics/opendata/field_data.yaml
+
+  # Set to "true" to display a static maintenance page.
+  maintenance-mode: false
+
+  # Insert HTML tags here to display custom header, footer or disclaimer in the UI.
+  disclaimer: "<!--insert your custom HTML disclaimer here-->"
+  header: "<!--insert your custom HTML header here-->"
+  footer: "<!--insert your custom HTML footer here-->"
+
+postgres:
+  host: localhost
+  port: 5432
+  user: <FILL>
+  password: <FILL>
+  database-name: <FILL>
+  table-name: logs
+  ssl-mode:
+  ssl-root-cert:
+
+logger:
+  name: opendata
+  module: opendata
+
+  # Possible logging levels from least to most verbose are:
+  # CRITICAL, FATAL, ERROR, WARNING, INFO, DEBUG
+  level: INFO
+
+  # Logs and heartbeat files are stored under these paths.
+  # Also configure external log rotation and app monitoring accordingly.
+  log-path: /var/log/xroad-metrics/opendata/logs
+  heartbeat-path: /var/log/xroad-metrics/opendata/heartbeat
+
+django:
+  # Django uses this secret key for cryptographic signing. It should be set to a unique and secret value.
+  # More information is available in Django documentation:
+  # https://docs.djangoproject.com/en/3.2/ref/settings/#std:setting-SECRET_KEY
+  secret-key: <FILL>
+  allowed-hosts:
+    - '*'

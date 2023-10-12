@@ -1,0 +1,28 @@
+FROM python:3.8-bullseye
+
+COPY collector_module/ /app/collector_module
+
+WORKDIR /app/collector_module
+
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir --user -r requirements.txt && \
+    python setup.py install
+
+RUN mkdir -p /var/log/xroad-metrics/collector/logs
+RUN mkdir -p /var/log/xroad-metrics/collector/heartbeat
+
+RUN mkdir -p /usr/share/xroad-metrics/collector/scripts/external_files
+RUN mkdir -p /usr/share/xroad-metrics/collector/scripts/cron
+
+ENV PATH="/root/.local/bin:${PATH}"
+ENV COLLECTOR_PASSWORD=default
+
+RUN mkdir -p /etc/xroad-metrics/collector/
+
+COPY files/collector/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
+WORKDIR /app/collector_module/bin
+CMD xroad-metrics-collector update && xroad-metrics-collector collect
+

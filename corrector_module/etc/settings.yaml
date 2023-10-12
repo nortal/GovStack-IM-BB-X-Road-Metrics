@@ -1,0 +1,126 @@
+# Default settings file for X-Road Metrics Corrector-module.
+# Fill in your MongoDB and X-Road configuration.
+#
+# To run corrector for many different X-Road instances, you can create settings
+# profiles. For example to have profiles DEV, TEST and PROD copy this file to
+# settings_DEV.yaml, settings_TEST.yaml and settings_PROD.yaml.
+# Then fill the profile specific settings to each file and use the --profile
+# flag when starting xroad-metrics-corrector. For example to run using the TEST profile:
+#    xroad-metrics-correctord --profile TEST
+
+corrector:
+  thread-count: 8
+
+  # Maximum number of records to process in one corrector batch
+  documents-max: 20000
+
+  # Minimum number of unprocessed records available to start new corrector batch
+  documents-min: 20000
+
+  # Number of days to wait before a record can be corrected
+  timeout-days: 3
+
+  # seconds to wait after batch if batch size was less than documents-min
+  wait-on-done: 300
+
+  # seconds to wait before attempting restart after error
+  wait-on-error: 600
+
+  # Time window to match documents (in milliseconds)
+  time-window: 600000 # 10 minutes
+
+  # Select the metrics that corrector should calculate and include in the cleaned data records:
+  calc:
+    total-duration: true
+    client-request-duration: true
+    client-response-duration: true
+    producer-request-duration: true
+    producer-response-duration: true
+    producer-duration-client-view: true
+    producer-duration-producer-view: true
+    producer-is-duration: true
+    request-nw-duration: true
+    response-nw-duration: true
+    request-size: true
+    response-size: true
+
+  # Data fields that need to match in both a client records and a service record to mark the records as a match:
+  comparison-list:
+    - 'clientMemberClass'
+    - 'requestMimeSize'
+    - 'serviceSubsystemCode'
+    - 'requestAttachmentCount'
+    - 'serviceSecurityServerAddress'
+    - 'messageProtocolVersion'
+    - 'responseSize'
+    - 'succeeded'
+    - 'clientSubsystemCode'
+    - 'responseAttachmentCount'
+    - 'serviceMemberClass'
+    - 'messageUserId'
+    - 'serviceMemberCode'
+    - 'serviceXRoadInstance'
+    - 'clientSecurityServerAddress'
+    - 'clientMemberCode'
+    - 'clientXRoadInstance'
+    - 'messageIssue'
+    - 'serviceVersion'
+    - 'requestSize'
+    - 'serviceCode'
+    - 'representedPartyClass'
+    - 'representedPartyCode'
+    - 'faultCode'
+    - 'faultString'
+    - 'responseMimeSize'
+    - 'messageId'
+
+  # If no match is found for a record using the above criteria, it will be matched again as an "orphan".
+  # Data fields that need to match in both a client record and a service record to mark the records as an orphan-match:
+  comparison_list_orphan:
+    - 'clientMemberClass'
+    - 'serviceSubsystemCode'
+    - 'serviceSecurityServerAddress'
+    - 'messageProtocolVersion'
+    - 'succeeded'
+    - 'clientSubsystemCode'
+    - 'serviceMemberClass'
+    - 'messageUserId'
+    - 'serviceMemberCode'
+    - 'serviceXRoadInstance'
+    - 'clientSecurityServerAddress'
+    - 'clientMemberCode'
+    - 'clientXRoadInstance'
+    - 'messageIssue'
+    - 'serviceVersion'
+    - 'serviceCode'
+    - 'representedPartyClass'
+    - 'representedPartyCode'
+    - 'faultCode'
+    - 'faultString'
+    - 'messageId'
+
+
+xroad:
+  instance: SANDBOX
+
+mongodb:
+  host: xroad-metrics-xroad-metrics-database:27017
+  user: corrector_SANDBOX
+  password: default
+  # set to True to enable secure connection
+  tls:
+  # path to CA pem file
+  tls-ca-file:
+
+logger:
+  name: corrector
+  module: corrector
+
+  # Possible logging levels from least to most verbose are:
+  # CRITICAL, FATAL, ERROR, WARNING, INFO, DEBUG
+  level: INFO
+
+  # Logs and heartbeat files are stored under these paths.
+  # Also configure external log rotation and app monitoring accordingly.
+  log-path: /var/log/xroad-metrics/corrector/logs
+  heartbeat-path: /var/log/xroad-metrics/corrector/heartbeat

@@ -1,0 +1,211 @@
+<!--
+  ~ The MIT License
+  ~ Copyright (c) 2021- Nordic Institute for Interoperability Solutions (NIIS)
+  ~ Copyright (c) 2017-2020 Estonian Information System Authority (RIA)
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in
+  ~ all copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  ~ THE SOFTWARE.
+  -->
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>X-Road Metrics OpenData, {{x_road_instance}}</title>
+        {% load static %}
+        <script type="text/javascript" src="/javascript/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="/javascript/bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/javascript/jquery-datatables/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="/javascript/moment/moment.min.js"></script>
+        <script type="text/javascript" src="/javascript/eonasdan-bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="{% static 'gui/index.css' %}" />
+        <link rel="stylesheet" type="text/css" href="/javascript/bootstrap/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" href="/javascript/jquery-datatables/css/jquery.dataTables.min.css"/>
+        <link rel="stylesheet" type="text/css" href="/javascript/eonasdan-bootstrap-datetimepicker/bootstrap-datetimepicker.min.css"/>
+        <link rel="shortcut icon" type="image/png" href="/static/favicon-32x32.png"/>
+
+    </head>
+    <body>
+        <div id='settings_profile' style="display:none;">{{settings_profile}}</div>
+        <div class="container-fluid">
+            <div class="header" style="display:flex; flex-direction:column;">
+                <div style="font-family:Roboto,Helvetica Neue,Helvetica,Arial,sans-serif;font-weight:normal;font-size:12px;line-height:16px;color:#9fb1c1">
+                    {{header | safe}}
+                </div>
+                <div style="display:flex; flex-direction:row; flex:1; justify-content:space-between">
+                    <a href="https://x-road.global/">
+                        <img
+                                src="/static/gui/xroad-metrics-100.png"
+                                alt="X-ROAD"
+                                style="display:block; height:auto;"
+                                height="auto"
+                        >
+                    </a>
+                    <img
+                            src="/static/gui/eu_rdf_100_en.png"
+                            alt="European Union / European Regional Development Fund / Investing in your future"
+                            style="display:block; height:auto;"
+                            height="auto"
+                    >
+                </div>
+            </div>
+
+            <div class="page-header">
+                <h3>X-Road Metrics OpenData, {{x_road_instance}}</h3>
+            </div>
+
+            <form method="get" id="download-form">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <b>Date*</b>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input type="text" name="date" class="form-control" id="date"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <b>Columns</b>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="radio-inline">
+                                <input type="radio" name="column-selection-type" value="all" checked="checked"> Select all columns
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="column-selection-type" value="subset"> Subset of columns
+                            </label>
+                        </div>
+
+                        <hr />
+
+                        <div class="form-group">
+                            <select class="form-control" size={{column_count}} id="selected-columns" multiple>
+                            {% for column_datum in column_data %}
+                                <option value="{{column_datum.name}}">{{column_datum.name}}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <b>Constraints</b>
+                    </div>
+                    <div class="panel-body">
+                        <div>
+                            <div class="form-inline">
+                                <select class="form-control" id="new-constraint-column">
+                                {% for column_datum in column_data %}
+                                    <option value="{{column_datum.name}}" data-type="{{column_datum.type}}">{{column_datum.name}}</option>
+                                {% endfor %}
+                                </select>
+
+                                <select class="form-control" id="new-constraint-operator"></select>
+                                <input type="text" class="form-control" id="new-constraint-value" placeholder="Value">
+                                <button class="btn btn-warning" id="add-constraint-btn">Add constraint</button>
+                            </div>
+
+                            <hr />
+
+                            <div id="constraints"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <b>Order clauses</b>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <select class="form-control" id="new-order-clause">
+                                {% for column_datum in column_data %}
+                                    <option value="{{column_datum.name}}">{{column_datum.name}}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <select class="form-control" id="new-order-direction">
+                                    <option value="asc">ascending</option>
+                                    <option value="desc">descending</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <button class="btn btn-warning" id="add-order-clause-btn">Add order clause</button>
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <div id="order-clauses"></div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary pull-right" id="download-meta-btn">Download meta</button>
+                <button type="submit" class="btn btn-primary pull-right" id="download-btn">Download</button>
+                <button class="btn btn-success pull-right" id="preview-btn">Preview</button>
+
+                <div class="modal fade information-modal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header text-center">
+                                <h3 class="modal-title">Date must be specified.</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+            <div class="clearfix"></div>
+
+            <div id="datatable"></div>
+
+            <hr />
+
+            <div style="font-size: 12px; color: #666666">
+                {{disclaimer | safe}}
+            </div>
+
+            <div class="footer" style="font-family:Roboto,Helvetica Neue,Helvetica,Arial,sans-serif;font-weight:normal;font-size:12px;line-height:16px;color:#9fb1c1">
+                <div>{{footer | safe}}</div>
+                <p>X-Road Metrics software is maintained by <a href="https://niis.org" target="_blank">Nordic Institute of Interoperability Solutions (NIIS)</a>.</p>
+                <p>X-Road Metrics <a href="https://x-road.global/xroad-metrics-licence-info" target="_blank">licence info</a>.</p>
+                <p>Feedback about X-Road Metrics can be sent to <a href="mailto:info@niis.org?subject=Feedback on X-Road Metrics">info@niis.org</a>.</p>
+            </div>
+        </div>
+
+        <script>$("#date").datetimepicker({format : "YYYY-MM-DD",
+                minDate: moment("{{min_date}}", "MMM DD, YYYY"), maxDate: moment("{{max_date}}", "MMM DD, YYYY")});
+        </script>
+        <script src="{% static 'gui/index.js' %}"></script>
+    </body>
+</html>

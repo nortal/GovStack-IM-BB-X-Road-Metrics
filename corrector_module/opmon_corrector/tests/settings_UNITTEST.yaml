@@ -1,0 +1,102 @@
+collector:
+  thread-count: 2
+  records-from-offset: 3600
+  records-to-offset: 100
+  repeat-min-records: 50
+  repeat-limit: 500
+
+corrector:
+  calc:
+    total-duration: true
+    client-request-duration: true
+    client-response-duration: true
+    producer-request-duration: true
+    producer-response-duration: true
+    producer-duration-client-view: true
+    producer-duration-producer-view: true
+    producer-is-duration: true
+    request-nw-duration: true
+    response-nw-duration: true
+    request-size: true
+    response-size: true
+  thread-count: 1
+  timeout-days: 10
+  time-window: 600000 # 10 minutes
+  documents-max: 100
+  comparison-list:
+    - 'clientMemberClass'
+    - 'requestMimeSize'
+    - 'serviceSubsystemCode'
+    - 'requestAttachmentCount'
+    - 'serviceSecurityServerAddress'
+    - 'messageProtocolVersion'
+    - 'responseSoapSize'
+    - 'succeeded'
+    - 'clientSubsystemCode'
+    - 'responseAttachmentCount'
+    - 'serviceMemberClass'
+    - 'messageUserId'
+    - 'serviceMemberCode'
+    - 'serviceXRoadInstance'
+    - 'clientSecurityServerAddress'
+    - 'clientMemberCode'
+    - 'clientXRoadInstance'
+    - 'messageIssue'
+    - 'serviceVersion'
+    - 'requestSoapSize'
+    - 'serviceCode'
+    - 'representedPartyClass'
+    - 'representedPartyCode'
+    - 'soapFaultCode'
+    - 'soapFaultString'
+    - 'responseMimeSize'
+    - 'messageId'
+  comparison_list_orphan:
+    - 'clientMemberClass'
+    - 'serviceSubsystemCode'
+    - 'serviceSecurityServerAddress'
+    - 'messageProtocolVersion'
+    - 'succeeded'
+    - 'clientSubsystemCode'
+    - 'serviceMemberClass'
+    - 'messageUserId'
+    - 'serviceMemberCode'
+    - 'serviceXRoadInstance'
+    - 'clientSecurityServerAddress'
+    - 'clientMemberCode'
+    - 'clientXRoadInstance'
+    - 'messageIssue'
+    - 'serviceVersion'
+    - 'serviceCode'
+    - 'representedPartyClass'
+    - 'representedPartyCode'
+    - 'soapFaultCode'
+    - 'soapFaultString'
+    - 'messageId'
+
+xroad:
+  instance: UNITTEST
+  central-server:
+    protocol: http://
+    host: x-road-cs
+    timeout: 1
+  security-server:
+    protocol: http://
+    host: x-road-ss
+    timeout: 1.0
+  monitoring-client:
+    memberclass: A
+    membercode: B-code
+    subsystemcode: C
+
+mongodb:
+  host: mongodb
+  user: testuser
+  password: testpass
+
+logger:
+  name: testlog
+  module: collector
+  level: DEBUG
+  log-path: /var/log/opmon/collector/logs
+  heartbeat-path: /var/log/opmon/collector/logs

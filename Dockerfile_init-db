@@ -1,0 +1,36 @@
+FROM python:3.8-bullseye
+
+COPY collector_module/ /app/collector_module
+
+WORKDIR /app/collector_module
+
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir --user -r requirements.txt && \
+    python setup.py install
+
+RUN mkdir -p /var/log/xroad-metrics/collector/logs
+RUN mkdir -p /var/log/xroad-metrics/collector/heartbeat
+
+ENV PATH="/root/.local/bin:${PATH}"
+
+WORKDIR /app/collector_module/bin
+
+COPY files/init-db/change_password.py /app/collector_module/bin/change_password.py
+
+# Define environment variables
+ENV MONGO_HOST=xroad-metrics-database
+ENV MONGO_PORT=27017
+ENV MONGO_ROOT_USER=admin
+ENV MONGO_ROOT_PASSWORD=pass
+ENV XROAD_INSTANCE=SANDBOX
+
+ENV ANALYZER_PASSWORD=default
+ENV ANALYZER_INTERFACE_PASSWORD=default
+ENV ANONYMIZER_PASSWORD=default
+ENV COLLECTOR_PASSWORD=default
+ENV CORRECTOR_PASSWORD=default
+ENV REPORTS_PASSWORD=default
+
+CMD sleep 10s && \
+ xroad-metrics-init-mongo --host $MONGO_HOST:$MONGO_PORT --user $MONGO_ROOT_USER --password $MONGO_ROOT_PASSWORD $XROAD_INSTANCE --dummy-passwords && \
+ python change_password.py --host $MONGO_HOST:$MONGO_PORT --admin_user $MONGO_ROOT_USER --admin_password $MONGO_ROOT_PASSWORD --xroad_instance $XROAD_INSTANCE
